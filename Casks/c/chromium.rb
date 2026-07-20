@@ -16,16 +16,11 @@ cask "chromium" do
   depends_on macos: :monterey
 
   app "chrome-mac/Chromium.app"
-  # shim script (https://github.com/Homebrew/homebrew-cask/issues/18809)
-  shimscript = "#{staged_path}/chromium.wrapper.sh"
-  binary shimscript, target: "chromium"
 
-  preflight do
-    File.write shimscript, <<~EOS
-      #!/bin/sh
-      exec '#{appdir}/Chromium.app/Contents/MacOS/Chromium' "$@"
-    EOS
-  end
+  # shim script (https://github.com/Homebrew/homebrew-cask/issues/18809)
+
+  command_wrapper "chromium.wrapper.sh",
+                  executable: "#{appdir}/Chromium.app/Contents/MacOS/Chromium"
 
   zap trash: [
     "~/Library/Application Support/Chromium",
