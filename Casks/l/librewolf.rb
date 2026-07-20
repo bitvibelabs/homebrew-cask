@@ -32,15 +32,9 @@ cask "librewolf" do
 
     app "LibreWolf.app"
     # shim script (https://github.com/Homebrew/homebrew-cask/issues/18809)
-    shimscript = "#{staged_path}/librewolf.wrapper.sh"
-    binary shimscript, target: "librewolf"
 
-    preflight do
-      File.write shimscript, <<~EOS
-        #!/bin/sh
-        exec '#{appdir}/LibreWolf.app/Contents/MacOS/librewolf' "$@"
-      EOS
-    end
+    command_wrapper "librewolf.wrapper.sh",
+                    executable: "#{appdir}/LibreWolf.app/Contents/MacOS/librewolf"
 
     zap trash: [
       "~/.librewolf",
